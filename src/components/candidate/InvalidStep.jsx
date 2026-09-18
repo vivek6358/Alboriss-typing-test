@@ -8,8 +8,8 @@ export default function InvalidStep({ candidateName, batchName, reason, onReset 
 
   const handleOverrideSubmit = (e) => {
     e.preventDefault();
-    const expected = import.meta.env.VITE_ADMIN_PASSWORD || 'alboriss2026';
-    if (passcode.trim() === expected || passcode.trim() === 'alboriss') {
+    const expected = import.meta.env.VITE_ADMIN_PASSWORD || 'anon123@';
+    if (passcode.trim() === expected) {
       if (onReset) onReset();
     } else {
       setOverrideError('Invalid passcode. Recruiter authorization required.');
@@ -97,7 +97,7 @@ export default function InvalidStep({ candidateName, batchName, reason, onReset 
                       setPasscode(e.target.value);
                       setOverrideError('');
                     }}
-                    placeholder="alboriss2026"
+                    placeholder="Enter passcode"
                     className="flex-1 px-3 py-2 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 font-mono"
                   />
                   <button
@@ -111,9 +111,6 @@ export default function InvalidStep({ candidateName, batchName, reason, onReset 
                 {overrideError && (
                   <p className="text-[11px] text-rose-600 font-semibold">{overrideError}</p>
                 )}
-                <p className="text-[11px] text-slate-400">
-                  Testing passcode: <code className="bg-slate-200 px-1 py-0.5 rounded text-slate-700">alboriss2026</code>
-                </p>
               </form>
             )}
           </div>

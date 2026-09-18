@@ -153,6 +153,7 @@ export default function CandidateApp() {
 
         {step === 'practice' && (
           <PracticeTestStep
+            activeBatch={activeBatch}
             candidateName={candidateName}
             batchName={activeBatch?.name || 'Batch'}
             onCompletePractice={handleCompletePractice}

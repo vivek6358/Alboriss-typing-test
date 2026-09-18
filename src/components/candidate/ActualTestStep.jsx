@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Clock, AlertTriangle, Wifi, WifiOff, ShieldAlert } from 'lucide-react';
 import PassageDisplay from './PassageDisplay';
+import CountdownOverlay from './CountdownOverlay';
 import { getPassageById } from '../../data/typingPassages';
 import { calculateTypingMetrics, formatTime } from '../../utils/typingCalculations';
 import { createAttempt, updateAttempt } from '../../services/supabase';
@@ -20,6 +21,7 @@ export default function ActualTestStep({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [isStartingConfirm, setIsStartingConfirm] = useState(true);
+  const [isCountingDown, setIsCountingDown] = useState(false);
 
   // References for strict lifecycle tracking
   const attemptIdRef = useRef(null);
@@ -136,6 +138,7 @@ export default function ActualTestStep({
 
   // Start the actual assessment
   const beginActualAssessment = async () => {
+    setIsCountingDown(false);
     setIsStartingConfirm(false);
     startTimeRef.current = Date.now();
 
@@ -283,13 +286,24 @@ export default function ActualTestStep({
 
             <button
               type="button"
-              onClick={beginActualAssessment}
+              onClick={() => {
+                setIsStartingConfirm(false);
+                setIsCountingDown(true);
+              }}
               className="w-full min-h-[50px] py-3 px-6 bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white font-black rounded-xl shadow-md transition-colors text-base cursor-pointer uppercase tracking-wider"
             >
               I AM READY — START 1-MINUTE TEST
             </button>
           </div>
         </div>
+      )}
+
+      {/* 3 2 1 Countdown before actual test starts */}
+      {isCountingDown && (
+        <CountdownOverlay
+          title="Actual Assessment Starting..."
+          onComplete={beginActualAssessment}
+        />
       )}
 
       {/* Network Alert if connection drops */}

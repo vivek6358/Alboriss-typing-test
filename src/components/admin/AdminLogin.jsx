@@ -11,7 +11,7 @@ export default function AdminLogin({ onLoginSuccess }) {
     e.preventDefault();
     setErrorMsg('');
 
-    const expectedPassword = import.meta.env.VITE_ADMIN_PASSWORD || 'alboriss2026';
+    const expectedPassword = import.meta.env.VITE_ADMIN_PASSWORD || 'anon123@';
 
     if (!password) {
       setErrorMsg('Please enter the recruiter passcode.');
@@ -99,10 +99,6 @@ export default function AdminLogin({ onLoginSuccess }) {
               <span>SIGN IN TO DASHBOARD</span>
             )}
           </button>
-
-          <p className="text-center text-[11px] text-slate-400">
-            Default local passcode: <code className="bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded font-mono">alboriss2026</code>
-          </p>
         </form>
       </div>
     </div>

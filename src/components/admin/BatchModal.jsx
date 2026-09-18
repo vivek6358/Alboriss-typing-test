@@ -78,9 +78,10 @@ export default function BatchModal({ isOpen, onClose, onCreateBatch, nextBatchNu
                 required
                 value={batchNumber}
                 onChange={(e) => {
-                  const num = e.target.value;
+                  const num = Number(e.target.value) || 1;
                   setBatchNumber(num);
                   setName(`Batch ${String(num).padStart(2, '0')}`);
+                  setPassageId(getNextPassageForBatchNumber(num).id);
                 }}
                 className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
               />
@@ -118,13 +119,13 @@ export default function BatchModal({ isOpen, onClose, onCreateBatch, nextBatchNu
               ))}
             </select>
             <p className="text-[11px] text-slate-500 mt-1">
-              Rotates across batches (Passage A, B, C) to ensure uniqueness.
+              Rotates across batches (Passage A through F) so each batch gets a different test.
             </p>
           </div>
 
           <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs text-slate-600">
             <span className="font-bold text-slate-700 block mb-0.5">Practice Passage:</span>
-            <span>{PRACTICE_PASSAGE.title} (Standardized 60-second trial)</span>
+            <span>Unique Practice Passage automatically assigned for Batch {String(batchNumber).padStart(2, '0')}.</span>
           </div>
 
           {/* Buttons */}

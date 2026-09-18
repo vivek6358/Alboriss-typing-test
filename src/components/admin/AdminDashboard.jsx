@@ -5,6 +5,7 @@ import {
   getAllAttempts,
   createBatch,
   updateBatchStatus,
+  deleteBatch,
   subscribeToBatchUpdates,
   isSupabaseConfigured
 } from '../../services/supabase';
@@ -26,7 +27,8 @@ import {
   Database,
   RefreshCw,
   LogOut,
-  Sparkles
+  Sparkles,
+  Trash2
 } from 'lucide-react';
 
 export default function AdminDashboard({ onLogout }) {
@@ -131,6 +133,23 @@ export default function AdminDashboard({ onLogout }) {
       await fetchBatches();
     } catch (err) {
       alert('Failed to update batch status: ' + err.message);
+    }
+  };
+
+  // Delete Batch handler
+  const handleDeleteBatch = async () => {
+    if (!selectedBatch) return;
+    const confirmDelete = window.confirm(
+      `Are you sure you want to permanently delete "${selectedBatch.name}"?\nAll candidate attempts and records in this batch will be erased.`
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await deleteBatch(selectedBatch.id);
+      await fetchBatches();
+      setAttempts([]);
+    } catch (err) {
+      alert('Failed to delete batch: ' + err.message);
     }
   };
 
@@ -289,6 +308,18 @@ export default function AdminDashboard({ onLogout }) {
                     <span>OPEN BATCH</span>
                   </>
                 )}
+              </button>
+            )}
+
+            {/* Delete Batch */}
+            {selectedBatch && (
+              <button
+                onClick={handleDeleteBatch}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 active:bg-rose-200 border border-rose-300 transition-colors cursor-pointer uppercase tracking-wider"
+                title="Permanently delete this batch and its results"
+              >
+                <Trash2 className="w-3.5 h-3.5 text-rose-600" />
+                <span>DELETE BATCH</span>
               </button>
             )}
 

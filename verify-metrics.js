@@ -47,12 +47,14 @@ const p1 = getNextPassageForBatchNumber(1);
 const p2 = getNextPassageForBatchNumber(2);
 const p3 = getNextPassageForBatchNumber(3);
 const p4 = getNextPassageForBatchNumber(4);
+const p7 = getNextPassageForBatchNumber(7);
 
 console.assert(p1.code === 'A', 'Batch 1 should receive Passage A');
 console.assert(p2.code === 'B', 'Batch 2 should receive Passage B');
 console.assert(p3.code === 'C', 'Batch 3 should receive Passage C');
-console.assert(p4.code === 'A', 'Batch 4 should cycle back to Passage A');
-console.log('✓ Passage rotation test passed');
+console.assert(p4.code === 'D', 'Batch 4 should receive Passage D');
+console.assert(p7.code === 'A', 'Batch 7 should cycle back to Passage A');
+console.log('✓ Passage rotation test passed with 6 distinct passages');
 
 // 6. Check required characters in practice and actual passages
 const requiredChars = ['₹', '%', '-', '/', ':', '.', ',', '@', '+'];

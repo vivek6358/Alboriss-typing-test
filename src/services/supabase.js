@@ -253,6 +253,37 @@ export async function updateBatchStatus(batchId, status) {
 }
 
 /**
+ * Delete a batch and all its candidate attempts
+ */
+export async function deleteBatch(batchId) {
+  if (!batchId) return false;
+
+  if (isSupabaseConfigured) {
+    // Delete typing attempts for this batch first
+    const { error: attemptsError } = await supabase
+      .from('typing_attempts')
+      .delete()
+      .eq('batch_id', batchId);
+    if (attemptsError) console.warn('Note deleting attempts:', attemptsError);
+
+    // Delete the batch
+    const { error } = await supabase
+      .from('batches')
+      .delete()
+      .eq('id', batchId);
+
+    if (error) throw error;
+    return true;
+  }
+
+  const batches = getLocalBatches().filter(b => b.id !== batchId);
+  saveLocalBatches(batches);
+  const attempts = getLocalAttempts().filter(a => a.batch_id !== batchId);
+  saveLocalAttempts(attempts);
+  return true;
+}
+
+/**
  * Create a typing attempt (called when practice starts or when actual test starts)
  */
 export async function createAttempt(attemptData) {

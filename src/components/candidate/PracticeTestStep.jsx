@@ -1,30 +1,33 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Clock, RotateCcw, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Clock, ArrowRight, CheckCircle2 } from 'lucide-react';
 import PassageDisplay from './PassageDisplay';
-import { PRACTICE_PASSAGE } from '../../data/typingPassages';
+import CountdownOverlay from './CountdownOverlay';
+import { getPracticePassageForBatch } from '../../data/typingPassages';
 import { calculateTypingMetrics, formatTime } from '../../utils/typingCalculations';
 
-export default function PracticeTestStep({ candidateName, batchName, onCompletePractice }) {
+export default function PracticeTestStep({ activeBatch, candidateName, batchName, onCompletePractice }) {
+  const practiceObj = getPracticePassageForBatch(activeBatch);
+  const practicePassageText = practiceObj.text;
+
+  const [isCountingDown, setIsCountingDown] = useState(true);
   const [typedText, setTypedText] = useState('');
   const [timeLeft, setTimeLeft] = useState(60);
   const [isFinished, setIsFinished] = useState(false);
   const [showCompleteModal, setShowCompleteModal] = useState(false);
   
-  const startTimeRef = useRef(Date.now());
+  const startTimeRef = useRef(null);
   const inputRef = useRef(null);
   const timerIntervalRef = useRef(null);
 
-  // Initialize practice timer
-  const initTimer = () => {
+  // Start 60s timer once 3 2 1 countdown completes
+  const handleCountdownComplete = () => {
+    setIsCountingDown(false);
     startTimeRef.current = Date.now();
     setTimeLeft(60);
-    setIsFinished(false);
-    setShowCompleteModal(false);
-    setTypedText('');
 
-    if (timerIntervalRef.current) {
-      clearInterval(timerIntervalRef.current);
-    }
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 50);
 
     timerIntervalRef.current = setInterval(() => {
       const elapsed = (Date.now() - startTimeRef.current) / 1000;
@@ -40,27 +43,23 @@ export default function PracticeTestStep({ candidateName, batchName, onCompleteP
   };
 
   useEffect(() => {
-    initTimer();
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 100);
-
     return () => {
       if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
     };
   }, []);
 
-  const handleRestart = () => {
-    initTimer();
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 100);
-  };
-
-  const metrics = calculateTypingMetrics(PRACTICE_PASSAGE.text, typedText, 60 - timeLeft);
+  const metrics = calculateTypingMetrics(practicePassageText, typedText, 60 - timeLeft);
 
   return (
     <div className="w-full max-w-5xl lg:max-w-6xl mx-auto px-4 py-2 sm:py-4">
+      {/* 3 2 1 Countdown before practice starts */}
+      {isCountingDown && (
+        <CountdownOverlay
+          title="Practice Assessment Starting..."
+          onComplete={handleCountdownComplete}
+        />
+      )}
+
       {/* DESKTOP-FOCUSED HEADER BAR */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm px-5 py-3 mb-3 flex items-center justify-between">
         <div>
@@ -77,7 +76,7 @@ export default function PracticeTestStep({ candidateName, batchName, onCompleteP
           </span>
         </div>
 
-        {/* Live Timer & Restart Action */}
+        {/* Live Timer (Restart option removed) */}
         <div className="flex items-center gap-4">
           <div className="text-right">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
@@ -87,24 +86,13 @@ export default function PracticeTestStep({ candidateName, batchName, onCompleteP
               {formatTime(timeLeft)}
             </span>
           </div>
-
-          {!isFinished && (
-            <button
-              type="button"
-              onClick={handleRestart}
-              className="flex items-center gap-1.5 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl border border-slate-300 transition-colors cursor-pointer"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>Restart</span>
-            </button>
-          )}
         </div>
       </div>
 
       {/* Monkeytype-style Word-Grouped Passage Display */}
       <div className="mb-3">
         <PassageDisplay
-          passage={PRACTICE_PASSAGE.text}
+          passage={practicePassageText}
           typedText={typedText}
           isActual={false}
         />
@@ -127,10 +115,10 @@ export default function PracticeTestStep({ candidateName, batchName, onCompleteP
           ref={inputRef}
           id="practiceTypingArea"
           rows={3}
-          disabled={isFinished}
+          disabled={isFinished || isCountingDown}
           value={typedText}
           onChange={(e) => setTypedText(e.target.value)}
-          placeholder="Start typing the practice passage here..."
+          placeholder={isCountingDown ? "Wait for countdown..." : "Start typing the practice passage here..."}
           autoCapitalize="none"
           autoComplete="off"
           autoCorrect="off"
