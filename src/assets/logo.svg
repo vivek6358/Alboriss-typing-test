@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" width="240" height="60">
+  <defs>
+    <linearGradient id="alborissGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#0369a1" />
+    </linearGradient>
+  </defs>
+  <!-- Background subtle badge -->
+  <rect width="240" height="60" rx="8" fill="#0f172a"/>
+  
+  <!-- Modern Geometric Icon -->
+  <g transform="translate(14, 12)">
+    <polygon points="18,3 32,33 4,33" fill="none" stroke="url(#alborissGrad)" stroke-width="3.5" stroke-linejoin="round"/>
+    <polygon points="18,12 26,30 10,30" fill="#38bdf8" opacity="0.9"/>
+    <circle cx="18" cy="22" r="2.5" fill="#ffffff" />
+  </g>
+
+  <!-- Typography -->
+  <text x="60" y="34" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="21" font-weight="800" fill="#ffffff" letter-spacing="1.5">ALBORISS</text>
+  <text x="60" y="47" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="600" fill="#94a3b8" letter-spacing="1.2">ASSESSMENT PLATFORM</text>
+</svg>

@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  
+  body {
+    overscroll-behavior-y: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Anti-selection and anti-copy utility for security */
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Mobile typing container */
+.typing-box {
+  min-height: 44px;
+  font-size: 16px; /* Prevents auto-zoom on iOS Safari */
+}
+
+/* Character highlight states for typing passage display */
+.char-pending {
+  color: #64748b;
+  background-color: transparent;
+}
+
+.char-correct {
+  color: #047857;
+  background-color: #d1fae5;
+  border-radius: 2px;
+}
+
+.char-incorrect {
+  color: #b91c1c;
+  background-color: #fee2e2;
+  text-decoration: underline;
+  border-radius: 2px;
+}
+
+.char-current {
+  background-color: #38bdf8;
+  color: #0f172a;
+  border-bottom: 2px solid #0284c7;
+  animation: pulse-caret 1s infinite alternate;
+}
+
+@keyframes pulse-caret {
+  0% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
