@@ -146,6 +146,7 @@ export default function AdminDashboard({ onLogout }) {
 
     try {
       await deleteBatch(selectedBatch.id);
+      setSelectedBatchId(null);
       await fetchBatches();
       setAttempts([]);
     } catch (err) {

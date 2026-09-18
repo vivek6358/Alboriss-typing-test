@@ -66,6 +66,10 @@ CREATE POLICY "Allow public update to batches"
     ON public.batches FOR UPDATE
     USING (true);
 
+CREATE POLICY "Allow public delete to batches"
+    ON public.batches FOR DELETE
+    USING (true);
+
 -- Allow public read access to typing_attempts
 CREATE POLICY "Allow public read access to typing_attempts"
     ON public.typing_attempts FOR SELECT
@@ -79,6 +83,11 @@ CREATE POLICY "Allow public insert to typing_attempts"
 -- Allow public update to typing_attempts (for saving completed/invalid results)
 CREATE POLICY "Allow public update to typing_attempts"
     ON public.typing_attempts FOR UPDATE
+    USING (true);
+
+-- Allow public delete to typing_attempts
+CREATE POLICY "Allow public delete to typing_attempts"
+    ON public.typing_attempts FOR DELETE
     USING (true);
 
 -- 6. Enable Realtime Publications

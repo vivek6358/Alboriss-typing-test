@@ -267,12 +267,18 @@ export async function deleteBatch(batchId) {
     if (attemptsError) console.warn('Note deleting attempts:', attemptsError);
 
     // Delete the batch
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('batches')
       .delete()
-      .eq('id', batchId);
+      .eq('id', batchId)
+      .select();
 
     if (error) throw error;
+    if (!data || data.length === 0) {
+      throw new Error(
+        'Supabase Row Level Security (RLS) blocked deletion. Please run the SQL DELETE policy in Supabase SQL Editor.'
+      );
+    }
     return true;
   }
 
